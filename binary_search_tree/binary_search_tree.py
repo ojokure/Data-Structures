@@ -1,7 +1,7 @@
+from dll_stack import Stack
+from dll_queue import Queue
 import sys
 sys.path.append('../queue_and_stack')
-from dll_queue import Queue
-from dll_stack import Stack
 
 
 class BinarySearchTree:
@@ -49,9 +49,27 @@ class BinarySearchTree:
     # Note: Research may be required
 
     # Print Pre-order recursive DFT
-    def pre_order_dft(self, node):
-        pass
+    def pre_order_dft(self, node, array):
+        array = []
+        if not node:
+            return array
+        else:
+            array.append(node.value)
+            array = self.pre_order_dft(node.left, array)
+            array = self.pre_order_dft(node.right, array)
+        return array
+
+    # print(pre_order_dft)
 
     # Print Post-order recursive DFT
-    def post_order_dft(self, node):
-        pass
+    def post_order_dft(self, node, array):
+        array = []
+        if not node:
+            return array
+        else:
+            array = self.post_order_dft(node.left, array)
+            array = self.post_order_dft(node.right, array)
+            array.append(node.value)
+        return array
+
+    # print(post_order_dft)
