@@ -1,3 +1,6 @@
+from collections import OrderedDict
+
+
 """Each ListNode holds a reference to its previous node
 as well as its next node in the List."""
 
@@ -51,8 +54,8 @@ class DoublyLinkedList:
     def __len__(self):
         return self.length
 
-    """Wraps the given value in a ListNode and inserts it 
-    as the new head of the list. Don't forget to handle 
+    """Wraps the given value in a ListNode and inserts it
+    as the new head of the list. Don't forget to handle
     the old head node's previous pointer accordingly."""
 
     def add_to_head(self, value):
@@ -75,8 +78,8 @@ class DoublyLinkedList:
         self.delete(self.head)
         return value
 
-    """Wraps the given value in a ListNode and inserts it 
-    as the new tail of the list. Don't forget to handle 
+    """Wraps the given value in a ListNode and inserts it
+    as the new tail of the list. Don't forget to handle
     the old tail node's next pointer accordingly."""
 
     def add_to_tail(self, value):
@@ -90,7 +93,7 @@ class DoublyLinkedList:
             self.tail.next = new_node
             self.tail = new_node
 
-    """Removes the List's current tail node, making the 
+    """Removes the List's current tail node, making the
     current tail's previous node the new tail of the List.
     Returns the value of the removed Node."""
 
@@ -99,7 +102,7 @@ class DoublyLinkedList:
         self.delete(self.tail)
         return value
 
-    """Removes the input node from its current spot in the 
+    """Removes the input node from its current spot in the
     List and inserts it as the new head node of the List."""
 
     def move_to_front(self, node):
@@ -113,7 +116,7 @@ class DoublyLinkedList:
             self.length -= 1
         self.add_to_head(value)
 
-    """Removes the input node from its current spot in the 
+    """Removes the input node from its current spot in the
     List and inserts it as the new tail node of the List."""
 
     def move_to_end(self, node):
@@ -161,13 +164,16 @@ class DoublyLinkedList:
         return max_value
 
 
-class CacheDict(dict):
+class CacheDict:
+    def __init__(self, key=None, value=None):
+        self.key = key
+        self.value = value
 
-    def __setitem__(self, key, value):
-        self.__dict__[key] = value
+    def setitem(self, key, value):
+        self.key = value
 
-    def __getitem__(self, key):
-        return self.__dict__[key]
+    def getitem(self, key):
+        return self.key
 
 
 class LRUCache:
@@ -180,8 +186,10 @@ class LRUCache:
     """
 
     def __init__(self, limit=10):
-        self.storage = DoublyLinkedList()
-        self.cache = CacheDict()
+        self.storage = dict()
+        self.cache = DoublyLinkedList()
+        self.limit = limit
+        self.size = 0
 
     """
     Retrieves the value associated with the given key. Also
@@ -192,15 +200,12 @@ class LRUCache:
     """
 
     def get(self, key):
-
-        node = self.cache.__getitem__(key)
-
-        if not node:
+        if key in self.storage:
+            node = self.storage[key]
+            self.cache.move_to_front(node)
+            return node.value[1]
+        else:
             return None
-    #  Item has been accessed. Move to the front of the cache
-        self.storage.move_to_front(node)
-
-        return node.value
     """
     Adds the given key-value pair to the cache. The newly-
     added pair should be considered the most-recently used
@@ -213,4 +218,31 @@ class LRUCache:
     """
 
     def set(self, key, value):
-        pass
+
+        if key in self.storage:
+            node = self.storage[key]
+            node.value = (key, value)
+            self.cache.move_to_front(node)
+            return
+        if self.size == self.limit:
+            del self.storage[self.cache.tail.value[0]]
+            self.cache.remove_from_tail()
+            self.size -= 1
+
+        self.cache.add_to_head((key, value))
+        self.storage[key] = self.cache.head
+        self.size += 1
+
+        # self.cache[key] = value
+        # self.storage.add_to_head(value)
+        # self.limit += 1
+
+        #     if len(self.cache) >= self.limit:
+        #         self.cache.popitem()
+        # self.cache[key] = value
+        # if self.limit >= 10:
+        #     self.storage.remove_from_tail()
+
+        # else:
+        # node.value = value
+        # self.storage.add_to_head(value)
