@@ -1,7 +1,14 @@
-from dll_stack import Stack
-from dll_queue import Queue
+# from dll_stack import Stack
+# from dll_queue import Queue
 import sys
 sys.path.append('../queue_and_stack')
+
+
+class NodeTree:
+    def __init__(self, value=None, left=None, right=None):
+        self.value = value
+        self.left = left
+        self.right = right
 
 
 class BinarySearchTree:
@@ -9,67 +16,148 @@ class BinarySearchTree:
         self.value = value
         self.left = None
         self.right = None
+        # self.tree = NodeTree(value)
 
     # Insert the given value into the tree
     def insert(self, value):
-        pass
+        # if self.tree.value is None:
+        #     self.tree.value = value
+        #     return
+        # else:
+        current_node = self
+        while current_node:
+            # check if our current node value is greater than the value to insert
+            if current_node.value > value:
+                # go left
+                if current_node.left:
+                    # if there's a left child set that to the tree(current_node) and repeat
+                    current_node = current_node.left
+                else:
+                    # else our node leaf is home
+                    current_node.left = BinarySearchTree(value)
+                    return
+            else:
+                # go right
+                if current_node.right:
+                  # if there's a right child set that to the tree(current_node) and repeat
+                    current_node = current_node.right
+                else:
+                    # else our node leaf is home
+                    current_node.right = BinarySearchTree(value)
+                    return
+        return
 
-    # Return True if the tree contains the value
-    # False if it does not
     def contains(self, target):
-        pass
 
-    # Return the maximum value found in the tree
+        contains_target = False
+
+        current_node = self
+
+        if current_node.value == target:
+            contains_target = True
+
+        else:
+            while current_node:
+                if current_node.value > target:
+                    # go left
+                    if current_node.left:
+                        current_node = current_node.left
+
+                else:
+
+                    if current_node.value == target:
+                        contains_target = True
+
+                    if current_node.right:
+                        current_node = current_node.right
+
+        return contains_target
+
     def get_max(self):
-        pass
 
-    # Call the function `cb` on the value of each node
-    # You may use a recursive or iterative approach
+        current_node = self
+
+        def get_max_helper(current_node):
+            if current_node.right is None:
+                return current_node.value
+            return get_max_helper(current_node.right)
+        return get_max_helper(current_node)
+        # while current_node.right:
+        #     current_node = current_node.right
+
+        # return current_node.value
+
+        # Call the function `cb` on the value of each node
+        # You may use a recursive or iterative approach
+
     def for_each(self, cb):
-        pass
+        current_node = self
+        cb(current_node.value)
 
-    # DAY 2 Project -----------------------
+        def for_each_helper(current_node, cb):
+            if current_node is None:
+                return
+            else:
+                cb(current_node.value)
+                for_each_helper(current_node.right, cb)
+                for_each_helper(current_node.left, cb)
+                return
+        return for_each_helper(current_node, cb)
+
+    # DAY 2 Project - ----------------------
 
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
-    def in_order_print(self, node):
-        pass
+
+    # def in_order_print(self, node, array):
+    #     array = []
+    #     if not node:
+    #         return array
+    #     else:
+    #         array = self.pre_order_dft(node.left, array)
+    #         array.append(node.value)
+    #         array = self.pre_order_dft(node.right, array)
+    #     return array
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
-    def bft_print(self, node):
-        pass
+
+    # def bft_print(self, node):
+    #     pass
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
-    def dft_print(self, node):
-        pass
 
-    # STRETCH Goals -------------------------
+    # def dft_print(self, node):
+    #     pass
+
+    # STRETCH Goals - ------------------------
     # Note: Research may be required
 
     # Print Pre-order recursive DFT
-    def pre_order_dft(self, node, array):
-        array = []
-        if not node:
-            return array
-        else:
-            array.append(node.value)
-            array = self.pre_order_dft(node.left, array)
-            array = self.pre_order_dft(node.right, array)
-        return array
+
+    # def pre_order_dft(self, node, array):
+    #     array = []
+    #     if not node:
+    #         return array
+    #     else:
+    #         array.append(node.value)
+    #         array = self.pre_order_dft(node.left, array)
+    #         array = self.pre_order_dft(node.right, array)
+    #     return array
 
     # print(pre_order_dft)
 
     # Print Post-order recursive DFT
-    def post_order_dft(self, node, array):
-        array = []
-        if not node:
-            return array
-        else:
-            array = self.post_order_dft(node.left, array)
-            array = self.post_order_dft(node.right, array)
-            array.append(node.value)
-        return array
+
+    # def post_order_dft(self, node, array):
+    #     array = []
+    #     if not node:
+    #         return array
+    #     else:
+    #         array = self.post_order_dft(node.left, array)
+    #         array = self.post_order_dft(node.right, array)
+    #         array.append(node.value)
+    #     return array
 
     # print(post_order_dft)
