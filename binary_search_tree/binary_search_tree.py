@@ -252,31 +252,21 @@ class BinarySearchTree:
 
         current_node = self
 
-        contains_target = False
-
-        if current_node.value == target:
-            contains_target = True
-            return contains_target
-
-        # else:
         while current_node:
+            if current_node.value == target:
+                return True
+
             if current_node.value > target:
                 # go left
                 if current_node.left:
                     current_node = current_node.left
-                    break
-
+                    return
             else:
-
-                if current_node.value == target:
-                    contains_target = True
-                    break
-
                 if current_node.right:
                     current_node = current_node.right
                     break
 
-        return contains_target
+        return current_node
 
     # def get_max(self):
     #     current_node = self
@@ -322,42 +312,59 @@ class BinarySearchTree:
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
 
-    # def bft_print(self, node):
-    #     pass
+    def bft_print(self, node):
+        if not node:
+            return
+        queue = Queue()
+        current_node = self
+        queue.enqueue(current_node)
 
-    # Print the value of every node, starting with the given node,
-    # in an iterative depth first traversal
+        while queue.len():
+            current_node = queue.dequeue()
+            print(current_node.value)
+            if current_node.left:
+                queue.enqueue(current_node.left)
+            if current_node.right:
+                queue.enqueue(current_node.right)
 
-    # def dft_print(self, node):
-    #     pass
+        # Print the value of every node, starting with the given node,
+        # in an iterative depth first traversal
 
-    # STRETCH Goals - ------------------------
-    # Note: Research may be required
+    def dft_print(self, node):
+        if not node:
+            return
+        stack = Stack()
+        current_node = self
+        stack.push(current_node)
 
-    # Print Pre-order recursive DFT
+        while stack.len():
+            current_node = stack.pop()
+            print(current_node.value)
+            if current_node.left:
+                stack.push(current_node.left)
+            if current_node.right:
+                stack.push(current_node.right)
 
-    # def pre_order_dft(self, node, array):
-    #     array = []
-    #     if not node:
-    #         return array
-    #     else:
-    #         array.append(node.value)
-    #         array = self.pre_order_dft(node.left, array)
-    #         array = self.pre_order_dft(node.right, array)
-    #     return array
+        # STRETCH Goals - ------------------------
+        # Note: Research may be required
 
-    # print(pre_order_dft)
+        # Print Pre-order recursive DFT
 
-    # Print Post-order recursive DFT
+    def pre_order_dft(self, node):
+        if not node:
+            return
 
-    # def post_order_dft(self, node, array):
-    #     array = []
-    #     if not node:
-    #         return array
-    #     else:
-    #         array = self.post_order_dft(node.left, array)
-    #         array = self.post_order_dft(node.right, array)
-    #         array.append(node.value)
-    #     return array
+        print(node.value)
+        self.pre_order_dft(node.left)
+        self.pre_order_dft(node.right)
 
-    # print(post_order_dft)
+        # print(pre_order_dft)
+
+        # Print Post-order recursive DFT
+
+    def post_order_dft(self, node):
+        if not node:
+            return
+        self.post_order_dft(node.left)
+        self.post_order_dft(node.right)
+        print(node.value)
