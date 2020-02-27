@@ -49,46 +49,50 @@ class BinarySearchTree:
 
     def contains(self, target):
 
-        contains_target = False
-
         current_node = self
+
+        contains_target = False
 
         if current_node.value == target:
             contains_target = True
+            return contains_target
 
-        else:
-            while current_node:
-                if current_node.value > target:
-                    # go left
-                    if current_node.left:
-                        current_node = current_node.left
+        # else:
+        while current_node:
+            if current_node.value > target:
+                # go left
+                if current_node.left:
+                    current_node = current_node.left
+                    break
 
-                else:
+            else:
 
-                    if current_node.value == target:
-                        contains_target = True
+                if current_node.value == target:
+                    contains_target = True
+                    break
 
-                    if current_node.right:
-                        current_node = current_node.right
+                if current_node.right:
+                    current_node = current_node.right
+                    break
 
         return contains_target
 
+    # def get_max(self):
+
+    #     current_node = self
+
+    #     def get_max_helper(current_node):
+    #         if current_node.right is None:
+    #             return current_node.value
+    #         return get_max_helper(current_node.right)
+    #     return get_max_helper(current_node)
+
     def get_max(self):
-
         current_node = self
+        while current_node.right:
+            current_node = current_node.right
 
-        def get_max_helper(current_node):
-            if current_node.right is None:
-                return current_node.value
-            return get_max_helper(current_node.right)
-        return get_max_helper(current_node)
-        # while current_node.right:
-        #     current_node = current_node.right
-
-        # return current_node.value
-
-        # Call the function `cb` on the value of each node
-        # You may use a recursive or iterative approach
+        return current_node.value
 
     def for_each(self, cb):
         current_node = self
