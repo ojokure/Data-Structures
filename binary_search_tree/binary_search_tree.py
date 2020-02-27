@@ -78,9 +78,7 @@ class BinarySearchTree:
         return contains_target
 
     # def get_max(self):
-
     #     current_node = self
-
     #     def get_max_helper(current_node):
     #         if current_node.right is None:
     #             return current_node.value
